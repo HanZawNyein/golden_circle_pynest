@@ -1,10 +1,10 @@
 import os
 from datetime import datetime, timedelta, timezone
-from http.client import HTTPException
 from typing import Annotated
 
 import jwt
 from fastapi import Depends
+from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from jwt import InvalidTokenError
 from nest.core import Injectable
@@ -22,7 +22,7 @@ from .auth_entity import AuthUser as AuthUserEntity
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="token",
+    tokenUrl="/auth/token",
     scopes={"me": "Read information about the current user.", "items": "Read items."},
 )
 
@@ -31,7 +31,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 class AuthService:
 
     def verify_password(self, plain_password, hashed_password):
-        return True  # pwd_context.verify(plain_password, hashed_password)
+        return pwd_context.verify(plain_password, hashed_password)
 
     def get_password_hash(self, password):
         return pwd_context.hash(password)
@@ -87,7 +87,7 @@ class AuthService:
             token_data = TokenData(scopes=token_scopes, username=username)
         except (InvalidTokenError, ValidationError):
             raise credentials_exception
-        user = self.get_user(session, username=token_data.username)
+        user = await  self.get_user_by_username(session, username=token_data.username)
         if user is None:
             raise credentials_exception
         for scope in security_scopes.scopes:

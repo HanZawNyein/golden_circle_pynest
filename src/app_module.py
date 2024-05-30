@@ -1,4 +1,5 @@
 from nest.core import PyNestFactory, Module
+
 from src.auth.auth_module import AuthModule
 from src.book.book_module import BookModule
 from .app_controller import AppController
