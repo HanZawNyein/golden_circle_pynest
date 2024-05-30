@@ -1,3 +1,13 @@
+# create a project
+```zsh
+pynest create-nest-app -n <MyAppName> -db postgresql --is-async
+```
+
+# create a module
+```zsh
+pynest g module -n <ModuleName>
+```
+
 # PyNest service
 
 This is a template for a PyNest service.
