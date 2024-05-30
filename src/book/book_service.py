@@ -41,7 +41,7 @@ class BookService:
         try:
             # query = select(BookEntity).filter(BookEntity.id == book_id)
             # result = await session.execute(query)
-            existing_book = self.get_book(book_id=book_id,session=session)#result.scalars().first()
+            existing_book = self.get_book(book_id=book_id, session=session)  # result.scalars().first()
             if existing_book:
                 for key, value in updated_book.dict().items():
                     setattr(existing_book, key, value)
