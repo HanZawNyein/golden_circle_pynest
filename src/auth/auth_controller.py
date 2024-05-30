@@ -9,7 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config import config
 from .auth_model import Token, UserRequestForm, SampleUser
-from .auth_service import AuthService, oauth2_scheme
+from .auth_service import AuthService
+from .token_utils import oauth2_scheme
 
 
 @Controller("auth")
