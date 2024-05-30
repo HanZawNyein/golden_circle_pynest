@@ -5,7 +5,11 @@ from .app_service import AppService
 from src.book.book_module import BookModule
 
 
-@Module(imports=[BookModule], controllers=[AppController], providers=[AppService])
+@Module(
+    imports=[BookModule],
+    controllers=[AppController],
+    providers=[AppService],
+)
 class AppModule:
     pass
 
