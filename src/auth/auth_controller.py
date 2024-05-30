@@ -8,7 +8,7 @@ from nest.core import Controller, Post, Depends, Get
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config import config
-from .auth_model import Token, UserRequestForm, User
+from .auth_model import Token, UserRequestForm, User, SampleUser
 from .auth_service import AuthService
 
 
@@ -23,9 +23,9 @@ class AuthController:
         return await self.auth_service.get_auth(session)
 
     @Post("/")
-    async def register(self, auth: UserRequestForm, session: AsyncSession = Depends(config.get_db)):
-        new_user = self.auth_service.register(auth, session)
-        return new_user
+    async def register(self, new_user: UserRequestForm, session: AsyncSession = Depends(config.get_db)) -> SampleUser:
+        new_user = await self.auth_service.register(new_user, session=session)
+        return SampleUser(username=new_user.username, email=new_user.email,full_name=new_user.full_name)
 
     @Post("/token")
     async def login_for_access_token(self,
@@ -41,9 +41,10 @@ class AuthController:
             expires_delta=access_token_expires,
         )
         return Token(access_token=access_token, token_type="bearer")
+
     #
     @Get("/users/me/")
-    async def read_users_me(self,session: AsyncSession = Depends(config.get_db),)->User:
+    async def read_users_me(self, session: AsyncSession = Depends(config.get_db), ) -> User:
         return await self.auth_service.get_current_user(session)
     #
     # @app.get("/users/me/items/")

@@ -16,7 +16,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.auth.auth_model import TokenData, UserRequestForm, UserInDB
+from src.auth.auth_model import TokenData, UserRequestForm, UserInDB, SampleUser
 from .auth_entity import AuthUser as AuthUserEntity
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -106,18 +106,18 @@ class AuthService:
     #     return current_user
 
     @async_db_request_handler
-    async def register(self, user: UserRequestForm, session: AsyncSession):
+    async def register(self, user: UserRequestForm, session: AsyncSession) -> SampleUser:
         context = {
             "username": user.username,
             "email": user.email,
             "full_name": user.full_name,
-            "hashed_password": user.password
+            "hashed_password": self.get_password_hash(password=user.password)
         }
         new_user = UserInDB(**context)
         new_auth = AuthUserEntity(**new_user.dict())
         session.add(new_auth)
         await session.commit()
-        return new_auth.id
+        return new_auth
 
     @async_db_request_handler
     async def get_auth(self, session: AsyncSession):

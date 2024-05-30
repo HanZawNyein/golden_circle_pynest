@@ -17,12 +17,12 @@ class SampleUser(BaseModel):
     full_name: str | None = None
 
 
-class User(SampleUser):
-    disabled: bool | None = False
-
-
 class UserRequestForm(SampleUser):
     password: str
+
+
+class User(SampleUser):
+    disabled: bool | None = False
 
 
 class UserInDB(User):
