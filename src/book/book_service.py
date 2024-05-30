@@ -10,6 +10,9 @@ from .book_model import Book
 
 @Injectable
 class BookService:
+    def __init__(self):
+        ...
+        # super(BookService,self).__init__()
 
     @async_db_request_handler
     async def get_books(self, session: AsyncSession):
@@ -36,9 +39,9 @@ class BookService:
     @async_db_request_handler
     async def update_book(self, book_id: int, updated_book: Book, session: AsyncSession):
         try:
-            query = select(BookEntity).filter(BookEntity.id == book_id)
-            result = await session.execute(query)
-            existing_book = result.scalars().first()
+            # query = select(BookEntity).filter(BookEntity.id == book_id)
+            # result = await session.execute(query)
+            existing_book = self.get_book(book_id=book_id,session=session)#result.scalars().first()
             if existing_book:
                 for key, value in updated_book.dict().items():
                     setattr(existing_book, key, value)
