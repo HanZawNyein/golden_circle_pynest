@@ -10,10 +10,6 @@ from .book_model import Book
 
 @Injectable
 class BookService:
-    def __init__(self):
-        ...
-        # super(BookService,self).__init__()
-
     @async_db_request_handler
     async def get_books(self, session: AsyncSession):
         query = select(BookEntity)

@@ -12,7 +12,6 @@ from ..auth.token_utils import oauth2_scheme
 
 @Controller("book")
 class BookController:
-
     def __init__(self, book_service: BookService):
         self.book_service = book_service
 
