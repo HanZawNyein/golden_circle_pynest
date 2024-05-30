@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.config import config
 from .auth_model import Token, UserRequestForm, SampleUser
 from .auth_service import AuthService
-from .token_utils import oauth2_scheme
+from .token_utils import oauth2_scheme, authenticate_user, create_access_token, get_current_user
 
 
 @Controller("auth")
@@ -33,11 +33,11 @@ class AuthController:
                                      form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
                                      session: AsyncSession = Depends(config.get_db),
                                      ) -> Token:
-        user = await self.auth_service.authenticate_user(session, form_data.username, form_data.password)
+        user = await authenticate_user(session, form_data.username, form_data.password)
         if not user:
             raise HTTPException(status_code=400, detail="Incorrect username or password")
         access_token_expires = timedelta(minutes=int(os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES', 30)))
-        access_token = self.auth_service.create_access_token(
+        access_token = create_access_token(
             data={"sub": user.username, "scopes": form_data.scopes},
             expires_delta=access_token_expires,
         )
@@ -47,5 +47,5 @@ class AuthController:
     @Get("/users/me/")
     async def read_users_me(self, security_scopes: SecurityScopes, token: Annotated[str, Depends(oauth2_scheme)],
                             session: AsyncSession = Depends(config.get_db), ) -> SampleUser:
-        user = await self.auth_service.get_current_user(session, security_scopes, token)
+        user = await get_current_user(session, security_scopes, token)
         return SampleUser(username=user.username, email=user.email, full_name=user.full_name)
