@@ -23,6 +23,7 @@ oauth2_scheme = OAuth2PasswordBearer(
     scopes={"me": "Read information about the current user.", "items": "Read items."},
 )
 
+
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
@@ -100,4 +101,3 @@ async def get_current_active_user(current_user: Annotated[User, Security(get_cur
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
-

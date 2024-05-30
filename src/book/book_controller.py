@@ -1,14 +1,13 @@
 from typing import Annotated
 
-from fastapi import Security
+from fastapi.security import SecurityScopes
 from nest.core import Controller, Get, Post, Depends, Put, Delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config import config
 from .book_model import Book
 from .book_service import BookService
-from ..auth.auth_model import User
-from ..auth.token_utils import get_current_active_user
+from ..auth.token_utils import oauth2_scheme
 
 
 @Controller("book")
@@ -18,7 +17,8 @@ class BookController:
         self.book_service = book_service
 
     @Get("/")
-    async def get_books(self,session: AsyncSession = Depends(config.get_db),):
+    async def get_books(self, security_scopes: SecurityScopes, token: Annotated[str, Depends(oauth2_scheme)],
+                        session: AsyncSession = Depends(config.get_db), ):
         return await self.book_service.get_books(session)
 
     @Get('/:book_id')
