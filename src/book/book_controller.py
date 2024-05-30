@@ -1,9 +1,9 @@
-from nest.core import Controller, Get, Post, Depends, Put, Delete, Patch
+from nest.core import Controller, Get, Post, Depends, Put, Delete
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.config import config
 
-from .book_service import BookService
+from src.config import config
 from .book_model import Book
+from .book_service import BookService
 
 
 @Controller("book")

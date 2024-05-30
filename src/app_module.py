@@ -1,8 +1,9 @@
 from nest.core import PyNestFactory, Module
-from .config import config
+
+from src.book.book_module import BookModule
 from .app_controller import AppController
 from .app_service import AppService
-from src.book.book_module import BookModule
+from .config import config
 
 
 @Module(

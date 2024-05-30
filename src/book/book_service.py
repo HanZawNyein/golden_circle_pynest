@@ -1,12 +1,11 @@
-from sqlalchemy.exc import NoResultFound
-
-from .book_model import Book
-from .book_entity import Book as BookEntity
-from nest.core.decorators.database import async_db_request_handler
 from nest.core import Injectable
-
+from nest.core.decorators.database import async_db_request_handler
 from sqlalchemy import select
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from .book_entity import Book as BookEntity
+from .book_model import Book
 
 
 @Injectable

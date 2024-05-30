@@ -1,4 +1,5 @@
-from nest.core import Controller, Get, Post
+from nest.core import Controller, Get
+
 from .app_service import AppService
 
 
