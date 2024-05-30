@@ -19,10 +19,6 @@ class AuthController:
     def __init__(self, auth_service: AuthService):
         self.auth_service = auth_service
 
-    @Get("/")
-    async def get_auth(self, session: AsyncSession = Depends(config.get_db)):
-        return await self.auth_service.get_auth(session)
-
     @Post("/")
     async def register(self, new_user: UserRequestForm, session: AsyncSession = Depends(config.get_db)) -> SampleUser:
         new_user = await self.auth_service.register(new_user, session=session)
