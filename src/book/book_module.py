@@ -8,8 +8,6 @@ from .book_service import BookService
     controllers=[BookController],
     providers=[BookService],
     imports=[]
-)   
+)
 class BookModule:
     pass
-
-    

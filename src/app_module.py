@@ -1,5 +1,6 @@
 from nest.core import PyNestFactory, Module
 
+from src.auth.auth_module import AuthModule
 from src.book.book_module import BookModule
 from .app_controller import AppController
 from .app_service import AppService
@@ -7,7 +8,7 @@ from .config import config
 
 
 @Module(
-    imports=[BookModule],
+    imports=[BookModule, AuthModule],
     controllers=[AppController],
     providers=[AppService],
 )

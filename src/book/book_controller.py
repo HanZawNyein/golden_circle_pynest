@@ -33,4 +33,4 @@ class BookController:
     @Delete('/:book_id')
     async def delete_book(self, book_id: int, session: AsyncSession = Depends(config.get_db)):
         result = await self.book_service.delete_book(book_id, session)
-        return {"message": "Book deleted successfully!","book":result}
+        return {"message": "Book deleted successfully!", "book": result}
